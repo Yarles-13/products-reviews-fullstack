@@ -1,31 +1,34 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors'); 
+const productRoutes = require('./routes/products');
 
 const app = express();
 const PORT = 8080;
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors()); // Allow frontend to connect to the backend
 
-// MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/ProductsDatabase', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
-// Routes
-const productRoutes = require('./routes/products');
+mongoose
+  .connect('mongodb://localhost:27017/ProductsDatabase', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-// Base route
+
 app.get('/', (req, res) => {
-  res.send('<h1>Success</h1>');
+  res.send('<h1>Backend Server is Running</h1>');
 });
 
-// Use combined routes
+
 app.use('/products', productRoutes);
 
-// Start server
+
 app.listen(PORT, () => {
-  console.log(`Running on port ${PORT}`);
+  console.log(`Backend server running on http://localhost:${PORT}`);
 });
