@@ -6,19 +6,19 @@ const productRoutes = require('./routes/products');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Middleware
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB Connection
+
 mongoose.connect('mongodb://localhost:27017/ProductsDatabase')
-  .then(() => console.log('✅ MongoDB connected successfully'))
+  .then(() => console.log('MongoDB connected '))
   .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
+    console.error(' MongoDB connection error:', err);
     process.exit(1);
   });
 
-// API Route for Product Data
+
 app.use('/api/products', productRoutes);
 
 app.use(express.static(path.join(__dirname, '../frontend/build')));
@@ -28,7 +28,7 @@ app.get('*', (req, res) => {
 });
 
 
-// Start the Server with Error Handling
+
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

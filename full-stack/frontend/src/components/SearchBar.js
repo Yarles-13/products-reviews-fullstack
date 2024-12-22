@@ -1,17 +1,15 @@
 import React from 'react';
 
-const SearchBar = ({ onSortPrice }) => {
+const SearchBar = ({ searchQuery, onSearch }) => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-      {/* Price Sorting Dropdown */}
-      <select
-        onChange={(e) => onSortPrice(e.target.value)}
-        className="px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-      >
-        <option value="">Sort by Price</option>
-        <option value="lowest">Lowest Price</option>
-        <option value="highest">Highest Price</option>
-      </select>
+    <div className="mb-6">
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => onSearch(e.target.value)}
+        placeholder="Search products..."
+        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+      />
     </div>
   );
 };
