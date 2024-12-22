@@ -1,15 +1,12 @@
 {
   "name": "full-stack",
   "version": "1.0.0",
-  "description": "Full stack app with React frontend and Node.js backend",
-  "main": "index.js",
   "scripts": {
-    "start": "npm run backend & npm run frontend",
-    "dev": "npm run backend & npm run frontend",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "backend": "cd backend && npm start",
-    "frontend": "cd frontend && npm start"
+    "frontend": "cd product-reviews-frontend && npm start"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "concurrently": "^7.0.0"
+  }
 }

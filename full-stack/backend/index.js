@@ -1,74 +1,37 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const bodyParser = require('body-parser');
-// const cors = require('cors'); 
-// const productRoutes = require('./routes/products');
-
-// const app = express();
-// const PORT = 8080;
-
-// // Middleware
-// app.use(bodyParser.json());
-// app.use(cors()); // Allow frontend to connect to the backend
-
-
-// mongoose
-//   .connect('mongodb://localhost:27017/ProductsDatabase', {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => console.log('MongoDB connected successfully'))
-//   .catch((err) => console.error('MongoDB connection error:', err));
-
-
-// app.get('/', (req, res) => {
-//   res.send('<h1>Backend Server is Running</h1>');
-// });
-
-
-// app.use('/products', productRoutes);
-
-
-// app.listen(PORT, () => {
-//   console.log(`Backend server running on http://localhost:${PORT}`);
-// });
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors'); 
+const path = require('path');
 const productRoutes = require('./routes/products');
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 // Middleware
-app.use(bodyParser.json());
-app.use(cors({ origin: '*' })); // Allow all origins for development
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Enhanced logging middleware for debugging
-app.use((req, res, next) => {
-  console.log(`Incoming Request: ${req.method} ${req.url}`);
-  next();
-});
-
-// MongoDB Connection (Updated to avoid deprecated options)
-mongoose
-  .connect('mongodb://localhost:27017/ProductsDatabase')
+// MongoDB Connection
+mongoose.connect('mongodb://localhost:27017/ProductsDatabase')
   .then(() => console.log('✅ MongoDB connected successfully'))
   .catch((err) => {
     console.error('❌ MongoDB connection error:', err);
-    process.exit(1); // Exit if connection fails
+    process.exit(1);
   });
 
-// Base route to test server health
-app.get('/', (req, res) => {
-  res.send('<h1>✅ Backend Server is Running</h1>');
+// API Route for Product Data
+app.use('/api/products', productRoutes);
+
+// Serve React Frontend
+app.use(express.static(path.join(__dirname, '../product-reviews-frontend/build')));
+
+// Fallback Route - Serve index.html if no API routes match
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../product-reviews-frontend/build', 'index.html'));
 });
 
-// Product routes (Make sure ./routes/products.js exists)
-app.use('/products', productRoutes);
-
-// Start the backend server
-app.listen(PORT, () => {
-  console.log(`🚀 Backend server running at http://localhost:${PORT}`);
+// Start the Server with Error Handling
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
+

@@ -75,50 +75,26 @@
 // };
 const Product = require('../models/Product');
 
-// Get all products (no pagination or filtering)
+// Get all products with filtering (by name, category, price)
 exports.getProducts = async (req, res) => {
+  const { name, category, price } = req.query;
+  let filter = {};
+
+  if (name) {
+    filter.name = { $regex: name, $options: 'i' };  // Case-insensitive search
+  }
+  if (category) {
+    filter.category = category;
+  }
+  if (price) {
+    filter.price = { $lte: price };
+  }
+
   try {
-    const products = await Product.find();  // Fetch all products
-    res.status(200).json({ products });     // Return as JSON
+    const products = await Product.find(filter);  // Fetch products and reviews
+    res.status(200).json({ products });
   } catch (error) {
     console.error('Error fetching products:', error);
     res.status(500).json({ message: 'Server error' });
-  }
-};
-
-// Get product by ID
-exports.getProductById = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id); 
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-// Create new product
-exports.createProduct = async (req, res) => {
-  try {
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
-
-// Delete product by ID
-exports.deleteProduct = async (req, res) => {
-  try {
-    const result = await Product.findByIdAndDelete(req.params.product);
-    if (!result) {
-      return res.status(404).send('Could not delete');
-    }
-    res.status(200).send('Product deleted');
-  } catch (error) {
-    res.status(500).send('Server error');
   }
 };

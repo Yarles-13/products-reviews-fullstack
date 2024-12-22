@@ -7,6 +7,7 @@ const ReviewSchema = new mongoose.Schema({
 
 const ProductSchema = new mongoose.Schema({
   name: String,
+  category: String,
   price: Number,
   reviews: [ReviewSchema], 
 });
