@@ -21,13 +21,12 @@ mongoose.connect('mongodb://localhost:27017/ProductsDatabase')
 // API Route for Product Data
 app.use('/api/products', productRoutes);
 
-// Serve React Frontend
-app.use(express.static(path.join(__dirname, '../product-reviews-frontend/build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// Fallback Route - Serve index.html if no API routes match
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../product-reviews-frontend/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
+
 
 // Start the Server with Error Handling
 const server = app.listen(PORT, () => {
