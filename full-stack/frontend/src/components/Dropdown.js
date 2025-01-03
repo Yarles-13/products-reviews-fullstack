@@ -7,7 +7,7 @@ const Dropdown = ({ onSortPrice }) => {
     
       <select
         onChange={(e) => onSortPrice(e.target.value)}
-        className="px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+        className="px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300 bg-blue-500"
       >
         <option value="">Sort by Price</option>
         <option value="lowest">Lowest Price</option>

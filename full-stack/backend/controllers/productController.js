@@ -2,7 +2,7 @@
 const Product = require('../models/Product');
 
 exports.getProducts = async (req, res) => {
-  const { name, category, price } = req.query;
+  const { name, category, price} = req.query;
   let filter = {};
 
   if (name) {
@@ -23,7 +23,13 @@ exports.getProducts = async (req, res) => {
   }
 
   try {
-    const products = await Product.find(filter); 
+    let products;
+
+    if(sortOrder !== 0){
+      products = await Product.find(filter).sort({price: sortOrder})
+    } else {
+      products = await Product.find(filter);
+    }
     res.status(200).json({ products });
   } catch (error) {
     console.error('Error fetching products:', error);

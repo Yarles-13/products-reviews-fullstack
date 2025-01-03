@@ -10,9 +10,10 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState(null);
 
-  // Fetch products from API
+  // Fetch products
   useEffect(() => {
-    fetch('/api/products') 
+    fetch('http://localhost:8080/api/products')
+
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.products);
@@ -21,7 +22,6 @@ function App() {
       .catch((err) => setError('Failed to fetch products'));
   }, []);
 
-  // Handle Sorting by Price
   const handleSortPrice = (sortOrder) => {
     const sorted = [...filteredProducts].sort((a, b) => {
       return sortOrder === 'lowest' ? a.price - b.price : b.price - a.price;
@@ -29,7 +29,7 @@ function App() {
     setFilteredProducts(sorted);
   };
 
-  // Handle Search Filtering
+ 
   const handleSearch = (query) => {
     setSearchQuery(query);
     const filtered = products.filter((product) =>
@@ -38,13 +38,12 @@ function App() {
     setFilteredProducts(filtered);
   };
 
-  if (error) return <div>{error}</div>;
+  if (error) return <div>{error}{' no soup for you'}</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-6">Product Store</h1>
       
-      {/* Search Bar Component */}
       <div className='bg-red-500'>
       <SearchBar 
         searchQuery={searchQuery} 
@@ -52,12 +51,12 @@ function App() {
       />
       </div>
 
-      {/* Dropdown for Sorting by Price */}
+     
       <Dropdown
         onSortPrice={handleSortPrice}
       />
     
-      {/* Product List */}
+  
       <ProductGrid products={filteredProducts} />
     </div>
   );
